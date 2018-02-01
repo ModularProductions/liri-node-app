@@ -19,10 +19,10 @@ OMDB_API_KEY=<your key>
 ```
 
 ### Functions as Arguments
-- my-tweets : Returns the last twenty Tweets some idiot vomited out.
-- spotify-this-song "`<query>`" : Calls the Spotify API to return some information about the queried song. No argument defaults to your favorite tune.
-- movie-this "`<query>`" : Calls the OMDB API to return some information about the queried movie. No argument defaults to your mom's favorite movie.
-- do-what-it-says : Parses the 'random.txt' file to perform another action with query argument. For God's sake, don't edit 'random.txt' to include "do-what-it-says".
+- `my-tweets` : Returns the last twenty Tweets some idiot vomited out.
+- `spotify-this-song "<query>"` : Calls the Spotify API to return some information about the queried song. No argument defaults to your favorite tune.
+- `movie-this "<query>"` : Calls the OMDB API to return some information about the queried movie. No argument defaults to your mom's favorite movie.
+- `do-what-it-says` : Parses the 'random.txt' file to perform another action with query argument. For God's sake, don't edit 'random.txt' to include "do-what-it-says".
 
 "?" may be passed as your function argument to return a list of valid function arguments.
 
