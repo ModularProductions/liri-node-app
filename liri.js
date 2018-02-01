@@ -1,4 +1,5 @@
 require("dotenv").config();
+var fs = require('fs');
 var keys = require('./keys.js');
 
 var Twitter = require('twitter');
@@ -8,12 +9,14 @@ var params = {user_id: '958048067806253056'};
 function myTweets() {
   twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
     if (!error) {
-      console.log("");
+      logAndPrintThis("");
       for (var i = 0; i < tweets.length; i++) {
-        console.log("> "+tweets[i].text);
-        console.log("Tweeted at "+tweets[i].created_at);
-        console.log("");
+        logAndPrintThis("> "+tweets[i].text);
+        logAndPrintThis("Tweeted at "+tweets[i].created_at);
+        logAndPrintThis("");
       }
+    } else {
+      console.log("error retrieving Tweets =", error);
     }
   });
 };
@@ -21,56 +24,81 @@ function myTweets() {
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 
-function spotifyThis() { 
+function spotifyThis(arg) { 
   function displaySong(res) {
-    console.log("Artist: ", res.tracks.items[0].album.artists[0].name);
-    console.log("Song: ", res.tracks.items[0].name);
-    console.log("Album: ",res.tracks.items[0].album.name);
-    console.log("Preview: ", res.tracks.items[0].preview_url);
-    console.log("");
+    logAndPrintThis("Artist: "+res.tracks.items[0].album.artists[0].name);
+    logAndPrintThis("Song: "+res.tracks.items[0].name);
+    logAndPrintThis("Album: "+res.tracks.items[0].album.name);
+    logAndPrintThis("Preview: "+res.tracks.items[0].preview_url);
+    logAndPrintThis("");
   };
-  console.log("");
-  if (process.argv[3] === undefined) {
-    spotify.search({ type: 'track', query: 'the sign ace of base' })
-    .then(function(response) { displaySong(response) }) // why does this work...
-    .catch(function(err) {
-      console.log(err);
-    });
-  } else {
-    spotify.search({ type: 'track', query: process.argv[3] })
-    .then(function(response) { displaySong(response) }) // why does this work...
-    // .then(displaySong(response)) // and this does not? ("response is not defined")
-    .catch(function(err) {
-      console.log(err);
-    });
-  };
+  logAndPrintThis("");
+  if (!arg) {arg = "the sign ace of base"};
+  spotify.search({ type: 'track', query: arg })
+  .then(function(response) { displaySong(response) })
+  .catch(function(err) {
+    console.log(err);
+  });
 };
 
 var request = require('request');
 
-function movieThis() {
-  request('http://www.omdbapi.com', function (error, response, body) {
-    // console.log(response);
-    console.log('error:', error); // Print the error if one occurred
-    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-    // console.log('body:', body); // Print the HTML for the Google homepage.
+function movieThis(arg) {
+  if (!arg) {arg = "Mr. Nobody"};
+  var queryURL = "http://www.omdbapi.com/?apikey="+keys.omdb+"&t="+arg;
+  request(queryURL, function (error, response) {
+    if (error) {console.log("Error retrieving OMDB data =", error)}
+    else {
+      res = JSON.parse(response.body);
+      fs.writeFile("./whut.txt", response, function(error) {
+        if (error) {
+          console.error("write error:  " + error.message);
+        }
+      });
+      logAndPrintThis("");
+      logAndPrintThis("Title: "+res.Title);
+      logAndPrintThis("Year: "+res.Year);
+      logAndPrintThis("IMDB Rating: "+res.Ratings[0].Value);
+      logAndPrintThis("RT Rating: "+res.Ratings[1].Value);
+      logAndPrintThis("Country: "+res.Country);
+      logAndPrintThis("Language: "+res.Language);
+      logAndPrintThis("Plot: "+res.Plot);
+      logAndPrintThis("Starring: "+res.Actors);
+      logAndPrintThis("");
+    };
   });
 };
-
-var fs = require('fs');
 
 function doWhat() {
   fs.readFile('./random.txt', 'utf8', function(err, data) {
-    console.log("bleah");
-    console.log(data);
+    if (err) {
+      console.log("Error reading random.txt =", err);
+    } else {
+      var com = data.split(',')[0];
+      var arg = data.split(',')[1];
+      runCommand(com, arg);      
+    }
+  })
+};
+
+function logAndPrintThis(data) {
+  console.log(data);
+  fs.appendFile("./log.txt", data+"\n", function(error) {
+    if (error) {
+      console.error("write error:  " + error.message);
+    }
   });
 };
 
-switch (process.argv[2]) {
-  default : console.log("not a valid command. ? for list."); break;
-  case "my-tweets" : myTweets(); break;
-  case "spotify-this-song" : spotifyThis(); break;
-  case "movie-this" : movieThis(); break;
-  case "do-what-it-says" : doWhat(); break;
-  case "?" : console.log("my-tweets | spotify-this-song '<song>' | movie-this '<movie>' | do-what-it-says")
+function runCommand(com, arg) {
+  switch (com) {
+    default : logAndPrintThis("not a valid command. ? for list."); break;
+    case "?" : console.log("my-tweets | spotify-this-song '<song>' | movie-this '<movie>' | do-what-it-says")
+    case "my-tweets" : myTweets(); break;
+    case "spotify-this-song" : spotifyThis(arg); break;
+    case "movie-this" : movieThis(arg); break;
+    case "do-what-it-says" : doWhat(); break;
+  };
 };
+
+runCommand(process.argv[2], process.argv[3]);
