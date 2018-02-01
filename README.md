@@ -25,4 +25,6 @@ OMDB_API_KEY=<your key>
 - do-what-it-says : Parses the 'random.txt' file to perform another action with query argument. For God's sake, don't edit 'random.txt' to include "do-what-it-says".
 
 "?" may be passed as your function argument to return a list of valid function arguments.
+
+*Ex.:* `node liri spotify-this-song "Strap Me Down"`
  
