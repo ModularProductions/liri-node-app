@@ -12,7 +12,7 @@ function myTweets() {
       logAndPrintThis("");
       for (var i = 0; i < tweets.length; i++) {
         logAndPrintThis("> "+tweets[i].text);
-        logAndPrintThis("Tweeted at "+tweets[i].created_at);
+        logAndPrintThis("Tweeted on "+tweets[i].created_at);
         logAndPrintThis("");
       }
     } else {
@@ -76,6 +76,10 @@ function doWhat() {
     } else {
       var com = data.split(',')[0];
       var arg = data.split(',')[1];
+      if (com === "do-what-it-says") {
+        logAndPrintThis("Nice try. Shall we divide by zero next?");
+        break;
+      }
       runCommand(com, arg);      
     }
   })
@@ -93,7 +97,7 @@ function logAndPrintThis(data) {
 function runCommand(com, arg) {
   switch (com) {
     default : logAndPrintThis("not a valid command. ? for list."); break;
-    case "?" : console.log("my-tweets | spotify-this-song '<song>' | movie-this '<movie>' | do-what-it-says")
+    case "?" : console.log("my-tweets | spotify-this-song '<song>' | movie-this '<movie>' | do-what-it-says"); break;
     case "my-tweets" : myTweets(); break;
     case "spotify-this-song" : spotifyThis(arg); break;
     case "movie-this" : movieThis(arg); break;
