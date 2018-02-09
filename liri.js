@@ -50,11 +50,6 @@ function movieThis(arg) {
     if (error) {console.log("Error retrieving OMDB data =", error)}
     else {
       res = JSON.parse(response.body);
-      fs.writeFile("./whut.txt", response, function(error) {
-        if (error) {
-          console.error("write error:  " + error.message);
-        }
-      });
       logAndPrintThis("");
       logAndPrintThis("Title: "+res.Title);
       logAndPrintThis("Year: "+res.Year);
@@ -78,9 +73,9 @@ function doWhat() {
       var arg = data.split(',')[1];
       if (com === "do-what-it-says") {
         logAndPrintThis("Nice try. Shall we divide by zero next?");
-        break;
-      }
+      } else {
       runCommand(com, arg);      
+      }
     }
   })
 };
