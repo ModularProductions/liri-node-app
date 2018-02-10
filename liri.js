@@ -49,17 +49,21 @@ function movieThis(arg) {
   request(queryURL, function (error, response) {
     if (error) {console.log("Error retrieving OMDB data =", error)}
     else {
-      res = JSON.parse(response.body);
-      logAndPrintThis("");
-      logAndPrintThis("Title: "+res.Title);
-      logAndPrintThis("Year: "+res.Year);
-      logAndPrintThis("IMDB Rating: "+res.Ratings[0].Value);
-      logAndPrintThis("RT Rating: "+res.Ratings[1].Value);
-      logAndPrintThis("Country: "+res.Country);
-      logAndPrintThis("Language: "+res.Language);
-      logAndPrintThis("Plot: "+res.Plot);
-      logAndPrintThis("Starring: "+res.Actors);
-      logAndPrintThis("");
+      var res = JSON.parse(response.body);
+      if (res.Title === undefined) {
+        logAndPrintThis(res.Error);
+      } else {
+        logAndPrintThis("");
+        logAndPrintThis("Title: "+res.Title);
+        logAndPrintThis("Year: "+res.Year);
+        logAndPrintThis("IMDB Rating: "+res.Ratings[0].Value);
+        logAndPrintThis("RT Rating: "+res.Ratings[1].Value);
+        logAndPrintThis("Country: "+res.Country);
+        logAndPrintThis("Language: "+res.Language);
+        logAndPrintThis("Plot: "+res.Plot);
+        logAndPrintThis("Starring: "+res.Actors);
+        logAndPrintThis("");
+      }
     };
   });
 };
