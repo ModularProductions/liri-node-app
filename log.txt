@@ -366,3 +366,13 @@ Language: English
 Plot: After a space merchant vessel perceives an unknown transmission as a distress call, its landing on the source moon finds one of the crew attacked by a mysterious lifeform, and they soon realize that its life cycle has merely begun.
 Starring: Tom Skerritt, Sigourney Weaver, Veronica Cartwright, Harry Dean Stanton
 
+
+Title: The Big Lebowski
+Year: 1998
+IMDB Rating: 8.2/10
+RT Rating: 81%
+Country: USA, UK
+Language: English, German, Hebrew, Spanish
+Plot: "The Dude" Lebowski, mistaken for a millionaire Lebowski, seeks restitution for his ruined rug and enlists his bowling buddies to help get it.
+Starring: Jeff Bridges, John Goodman, Julianne Moore, Steve Buscemi
+
